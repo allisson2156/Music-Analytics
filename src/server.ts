@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import router from './routes';
 
-// Variáveis definidas no arquivo emv 
+// Load environment variables 
 dotenv.config();
 
 const app = express();
@@ -12,5 +12,5 @@ app.use(express.json());
 app.use(router);
 
 app.listen(Number(PORT), '127.0.0.1', () => {
-    console.log(`Sevirdor rodando em http://127.0.0.1:${PORT}`);
+    console.log(`🚀 Server running securely at http://127.0.0.1:${PORT}`);
 });

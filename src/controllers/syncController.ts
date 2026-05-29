@@ -24,6 +24,7 @@ export async function syncUserScrobbles(req: Request, res: Response) {
         let scrobblesProcessed = 0;
 
         for (const track of tracks) {
+            // Skip tracks playing now (they don't have a definitive date)
             if (!track.date) continue;
 
             const artistName = track.artist['#text'];
@@ -31,10 +32,10 @@ export async function syncUserScrobbles(req: Request, res: Response) {
             const trackTitle = track.name;
             const trackMbid = track.mbid;
 
-            // Converte timestamp UNIX 
+            // Convert UNIX timestamp 
             const playedAt = new Date(parseInt(track.date.uts) * 1000);
 
-            // Garante que o artista existe no banco
+            // Ensure the artist exists in the database
             const dbArtist = await prisma.artist.upsert({
                 where: { name: artistName },
                 update: {},
@@ -44,10 +45,10 @@ export async function syncUserScrobbles(req: Request, res: Response) {
                 },
             });
 
-            // Garante que a música existe no banco 
+            // Ensure the track exists in the database 
             const dbTrack = await prisma.track.upsert({
                 where: {
-                    // Definido no schema.prisma
+                    // Defined in schema.prisma
                     title_artistId: {
                         title: trackTitle,
                         artistId: dbArtist.id,
@@ -61,7 +62,7 @@ export async function syncUserScrobbles(req: Request, res: Response) {
                 },
             });
 
-            // Salava o Scrobble vínculado ao usuário 
+            // Save the Scrobble linked to the user 
             await prisma.scrobble.upsert({
                 where: {
                     userId_playedAt: {

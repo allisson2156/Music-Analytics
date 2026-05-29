@@ -1,65 +1,65 @@
-// Configuração do gerador do cliente do Prisma (TypeScript)
+// Prisma Client generator configuration (TypeScript)
 generator client {
   provider = "prisma-client-js"
 }
 
-// Configuração da conexão com o banco de dados (SQLite)
+// Database connection configuration (SQLite)
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-// modelos de dados (Tabelas)
+// Data models (Tables)
 
 model User {
   id           Int        @id @default(autoincrement())
-  username     String     @unique // Nome de usuário do Last.fm
-  displayName  String?    // Nome de exibição opcional
-  registeredAt DateTime?  // Data em que o usuário se cadastrou no Last.fm
+  username     String     @unique // Last.fm username
+  displayName  String?    // Optional display name
+  registeredAt DateTime?  // Date when the user registered on Last.fm
   createdAt    DateTime   @default(now())
   
-  // Relações
+  // Relations
   scrobbles    Scrobble[]
 }
 
 model Artist {
   id        Int      @id @default(autoincrement())
-  name      String   @unique // Nome do artista (ex: "Adele")
-  mbid      String?  // MusicBrainz ID (identificador universal opcional da música)
+  name      String   @unique // Artist name (e.g., "Adele")
+  mbid      String?  // MusicBrainz ID (optional identifier)
   
-  // Relações
+  // Relations
   tracks    Track[]
 }
 
 model Track {
   id        Int      @id @default(autoincrement())
-  title     String   // Título da música (ex: "Hello")
-  mbid      String?  // MusicBrainz ID opcional
+  title     String   // Track title (e.g., "Hello")
+  mbid      String?  // Optional MusicBrainz ID
   
-  // Relação com o Artista (Uma música pertence a um Artista)
+  // Relation with Artist (A track belongs to an Artist)
   artistId  Int
   artist    Artist   @relation(fields: [artistId], references: [id])
   
-  // Relações
+  // Relations
   scrobbles Scrobble[]
 
-  // Garante que não teremos duas músicas com o mesmo título do MESMO artista no banco.
-  // Ex: Pode existir "Hello" do Lionel Richie e "Hello" da Adele, mas não duas "Hello" da Adele.
+  // Ensures that we don't have two tracks with the same title from the SAME artist in the database.
+  // E.g., "Hello" by Lionel Richie and "Hello" by Adele can coexist, but not two "Hello" tracks by Adele.
   @@unique([title, artistId])
 }
 
 model Scrobble {
   id        Int      @id @default(autoincrement())
-  playedAt  DateTime // Quando a música foi ouvida (timestamp)
+  playedAt  DateTime // When the track was listened to (timestamp)
   
-  // Relação com o Usuário (Quem ouviu)
+  // Relation with User (Who listened)
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   
-  // Relação com a Música (O que ouviu)
+  // Relation with Track (What was listened to)
   trackId   Int
   track     Track    @relation(fields: [trackId], references: [id])
 
-  // Um usuário não pode registrar duas músicas tocadas no exato mesmo segundo.
+  // A user cannot record two tracks played at the exact same second.
   @@unique([userId, playedAt])
 }

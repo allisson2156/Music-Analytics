@@ -2,19 +2,19 @@ const LASTFM_API_URL = 'http://ws.audioscrobbler.com/2.0/';
 
 export interface LastFmTrack {
     artist: {
-        '#text': string; // Nome do artista 
-        mbid: string; // ID do MusicBrainz 
+        '#text': string; // Artist name
+        mbid: string; // MusicBrainz ID
     };
-    name: string; // nome da música
+    name: string; // Track name
     mbid: string;
     date?: {
         uts: string;
     };
     '@attr'?: {
-        nowplaying: string; // Indica se a música está sendo tocada 
+        nowplaying: string; // Indicates if the track is currently playing
     };
 };
-// chama a API do LastFM e retorna os Scrobbles recentes 
+// Calls the Last.fm API and returns recent scrobbles 
 export async function fetchRecentTracks(username: string, limit = 200):
     Promise<LastFmTrack[]> {
     const apiKey = process.env.LASTFM_API_KEY;

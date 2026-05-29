@@ -13,10 +13,10 @@ router.get('/health', (req: Request, res: Response) => {
     });
 });
 
-// Rota para sincronizar Scrobbles 
+// Route to synchronize Scrobbles 
 router.post('/users/sync', syncUserScrobbles);
 
-// Rotas analíticas 
+// Analytical routes 
 router.get('/tracks', getTracks);
 router.get('/stats/top-artists', getTopArtists);
 router.get('/stats/listening-hours', getListeningHours);

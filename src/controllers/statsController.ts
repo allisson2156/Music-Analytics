@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import prisma from '../db';
 
 /**
- * Rota 1: GET /tracks
- * Retorna as músicas e a quantidade de vezes que foram ouvidas usando Prisma ORM puro.
+ * Route 1: GET /tracks
+ * Returns tracks and their play count using pure Prisma ORM.
  */
 export async function getTracks(req: Request, res: Response) {
     try {
@@ -18,7 +18,7 @@ export async function getTracks(req: Request, res: Response) {
             }
         });
 
-        // Formata a resposta para ficar mais amigável 
+        // Format the response to be more user-friendly 
         const formattedTracks = tracks.map(t => ({
             id: t.id,
             title: t.title,
@@ -28,22 +28,23 @@ export async function getTracks(req: Request, res: Response) {
 
         return res.json(formattedTracks);
     } catch (error: any) {
-        console.error('Erro ao buscar músicas:', error);
+        console.error('Error fetching tracks:', error);
         return res.status(500).json({
-            error: 'Erro ao buscar músicas',
+            error: 'Error fetching tracks',
             details: error.message
         });
     }
 }
 
 /**
- * Rota 2: GET /stats/top-artists
- * Retorna o ranking de artistas mais ouvidos usando SQL Puro no SQLite.
+ * Route 2: GET /stats/top-artists
+ * Returns the top artist ranking using raw SQL in SQLite.
  */
 export async function getTopArtists(req: Request, res: Response) {
     const limit = req.query.limit ? Number(req.query.limit) : 10;
 
     try {
+        // Execute the classic query with JOINs to count scrobbles per artist
         const topArtists = await prisma.$queryRawUnsafe<any[]>(`
             SELECT 
                 a.id, 
@@ -60,25 +61,26 @@ export async function getTopArtists(req: Request, res: Response) {
         const formattedResult = topArtists.map(item => ({
             id: item.id,
             name: item.name,
-            scrobbles: Number(item.scrobbleCount) // Corrigido para scrobbleCount (no singular)
+            scrobbles: Number(item.scrobbleCount) 
         }));
 
         return res.json(formattedResult);
     } catch (error: any) {
-        console.error('Erro ao buscar top artistas:', error);
+        console.error('Error fetching top artists:', error);
         return res.status(500).json({
-            error: 'Erro ao buscar estatísticas de artistas',
+            error: 'Error fetching artist statistics',
             details: error.message
         });
     }
 }
 
 /**
- * Rota 3: GET /stats/listening-hours
- * Retorna as horas do dia mais ouvidas ordenadas do pico de atividade para o menor usando SQL Puro.
+ * Route 3: GET /stats/listening-hours
+ * Returns the most listened hours of the day ordered from peak activity to lowest using raw SQL.
  */
 export async function getListeningHours(req: Request, res: Response) {
     try {
+        // Extract the hour ('%H') directly from the ISO date format stored in SQLite
         const hours = await prisma.$queryRawUnsafe<any[]>(`
             SELECT 
                 strftime('%H', playedAt) as hour,
@@ -90,14 +92,14 @@ export async function getListeningHours(req: Request, res: Response) {
 
         const formattedResult = hours.map(item => ({
             hour: `${item.hour}:00`,
-            scrobbles: Number(item.scrobbleCount) // Corrigido para scrobbleCount
+            scrobbles: Number(item.scrobbleCount) // Corrected to scrobbleCount
         }));
 
         return res.json(formattedResult);
     } catch (error: any) {
-        console.error('Erro ao buscar horários:', error);
+        console.error('Error fetching listening hours:', error);
         return res.status(500).json({
-            error: 'Erro ao buscar estatísticas de horários',
+            error: 'Error fetching listening hours statistics',
             details: error.message
         });
     }

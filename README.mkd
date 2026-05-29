@@ -1,0 +1,27 @@
+Music-Analytics
+A personal music analytics API that ingests data from Last.fm, built as a learning lab for backend architecture, REST, GraphQL, and database design.
+
+The project is structured around evolutionary architecture. The system will be rebuilt three times across different communication paradigms to compare performance, DX (developer experience), and architectural trade-offs:
+
+V1: REST API (Express, Prisma, SQLite) — Current Phase
+V2: GraphQL API (Apollo Server / Nexus)
+V3: Serverless / Cloud Functions
+The domain model, business rules, and analytical queries remain constant, while the delivery mechanism changes.
+
+🛠️ Tech Stack (V1)
+Runtime: Node.js
+Language: TypeScript (Strict Mode)
+Web Framework: Express
+Database ORM: Prisma
+Database: SQLite (local file-based SQL for prototyping)
+Database Design
+The data ingestion pipeline parses raw JSON from the Last.fm API and normalizes it into a relational schema:
+
+User: Stores user metadata.
+Artist: Unique registry of artists.
+Track: Unique registry of tracks, linked to an Artist (handles same-name tracks by different artists via compound keys).
+Scrobble: Represents a single playback event connecting a User and a Track at a specific timestamp.
+Getting Started
+Prerequisites
+Node.js (LTS version)
+NPM npm install
