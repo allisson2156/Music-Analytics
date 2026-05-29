@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.local
+*.db
+*.db-journal
+npm-debug.log*

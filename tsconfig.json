@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2022",                          /* Versão do JS gerada após compilação */
+    "module": "commonjs",                        /* Sistema de módulos utilizado */
+    "lib": ["es2022"],                           /* Bibliotecas de tipos disponíveis */
+    "allowJs": true,                             /* Permite arquivos JS normais se necessário */
+    "outDir": "./dist",                          /* Pasta onde ficará o build final */
+    "rootDir": "./src",                          /* Pasta onde está nosso código TS */
+    "strict": true,                              /* Ativa validações estritas de tipo (boa prática) */
+    "noImplicitAny": true,                       /* Impede tipos 'any' implícitos */
+    "esModuleInterop": true,                      /* Facilita importação de pacotes CommonJS como o Express */
+    "skipLibCheck": true,                        /* Pula checagem de tipos de bibliotecas de terceiros */
+    "forceConsistentCasingInFileNames": true     /* Garante consistência de maiúsculas/minúsculas */
+  },
+  "include": ["src/**/*"]                        /* Arquivos que o TS deve observar */
+}

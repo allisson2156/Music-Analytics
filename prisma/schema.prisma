@@ -1,0 +1,65 @@
+// Configuração do gerador do cliente do Prisma (TypeScript)
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Configuração da conexão com o banco de dados (SQLite)
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// modelos de dados (Tabelas)
+
+model User {
+  id           Int        @id @default(autoincrement())
+  username     String     @unique // Nome de usuário do Last.fm
+  displayName  String?    // Nome de exibição opcional
+  registeredAt DateTime?  // Data em que o usuário se cadastrou no Last.fm
+  createdAt    DateTime   @default(now())
+  
+  // Relações
+  scrobbles    Scrobble[]
+}
+
+model Artist {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique // Nome do artista (ex: "Adele")
+  mbid      String?  // MusicBrainz ID (identificador universal opcional da música)
+  
+  // Relações
+  tracks    Track[]
+}
+
+model Track {
+  id        Int      @id @default(autoincrement())
+  title     String   // Título da música (ex: "Hello")
+  mbid      String?  // MusicBrainz ID opcional
+  
+  // Relação com o Artista (Uma música pertence a um Artista)
+  artistId  Int
+  artist    Artist   @relation(fields: [artistId], references: [id])
+  
+  // Relações
+  scrobbles Scrobble[]
+
+  // Garante que não teremos duas músicas com o mesmo título do MESMO artista no banco.
+  // Ex: Pode existir "Hello" do Lionel Richie e "Hello" da Adele, mas não duas "Hello" da Adele.
+  @@unique([title, artistId])
+}
+
+model Scrobble {
+  id        Int      @id @default(autoincrement())
+  playedAt  DateTime // Quando a música foi ouvida (timestamp)
+  
+  // Relação com o Usuário (Quem ouviu)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  
+  // Relação com a Música (O que ouviu)
+  trackId   Int
+  track     Track    @relation(fields: [trackId], references: [id])
+
+  // Um usuário não pode registrar duas músicas tocadas no exato mesmo segundo.
+  @@unique([userId, playedAt])
+}
