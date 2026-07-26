@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "c1f2e3d4-5678-90ab-cdef-1234567890ab",
+		"name": "Listening Analytics API",
+		"description": "Coleção oficial da API Listening Analytics (REST V1 e GraphQL V2) para análise de dados musicais do Last.fm.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "REST API (V1)",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Verifica a disponibilidade do servidor REST."
+					},
+					"response": []
+				},
+				{
+					"name": "Sync User Scrobbles",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"rj\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/sync",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"sync"
+							]
+						},
+						"description": "Sincroniza os scrobbles de um usuário do Last.fm com o banco local."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tracks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tracks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tracks"
+							]
+						},
+						"description": "Retorna todas as músicas registradas."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top Artists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/stats/top-artists",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stats",
+								"top-artists"
+							]
+						},
+						"description": "Retorna o ranking de artistas mais ouvidos."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Listening Hours",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/stats/listening-hours",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stats",
+								"listening-hours"
+							]
+						},
+						"description": "Retorna a distribuição de reproduções agrupadas por hora do dia."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GraphQL API (V2)",
+			"item": [
+				{
+					"name": "GraphQL Health Check",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query HealthCheck {\n  health\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						},
+						"description": "Health check via GraphQL query."
+					},
+					"response": []
+				},
+				{
+					"name": "GraphQL Top Artists",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTopArtists($limit: Int) {\n  topArtists(limit: $limit) {\n    id\n    name\n    scrobbles\n  }\n}",
+								"variables": "{\n  \"limit\": 5\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						},
+						"description": "Consulta o ranking de top artistas via GraphQL."
+					},
+					"response": []
+				},
+				{
+					"name": "GraphQL Listening Hours",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetListeningHours {\n  listeningHours {\n    hour\n    scrobbles\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						},
+						"description": "Consulta estatísticas temporais de audição via GraphQL."
+					},
+					"response": []
+				},
+				{
+					"name": "GraphQL Sync Scrobbles Mutation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation SyncUserScrobbles($username: String!) {\n  syncUserScrobbles(username: $username) {\n    success\n    message\n    scrobblesProcessed\n  }\n}",
+								"variables": "{\n  \"username\": \"rj\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						},
+						"description": "Mutation para acionar sincronização de scrobbles via GraphQL."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

@@ -1,3 +1,7 @@
+# Regras de Desenvolvimento e Arquitetura
+
+- **Tomada de Decisões de Design**: Sempre que formos tomar decisões de System Design ou arquitetura no projeto, traga as principais abordagens possíveis, os trade-offs de cada uma (vantagens e desvantagens) e uma recomendação de qual usar e o porquê.
+
 # Last.fm Analytics API
 
 ## Projeto de Aprendizagem Backend, Arquitetura e Desenvolvimento Cognitivo

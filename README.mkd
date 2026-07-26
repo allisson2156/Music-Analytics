@@ -1,27 +1,102 @@
-Music-Analytics
-A personal music analytics API that ingests data from Last.fm, built as a learning lab for backend architecture, REST, GraphQL, and database design.
+# Listening-Analytics API
 
-The project is structured around evolutionary architecture. The system will be rebuilt three times across different communication paradigms to compare performance, DX (developer experience), and architectural trade-offs:
+A personal music analytics API that ingests data from Last.fm, built as a learning lab for backend architecture, REST, GraphQL, database design, and software architecture.
 
-V1: REST API (Express, Prisma, SQLite) — Current Phase
-V2: GraphQL API (Apollo Server / Nexus)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://god.postman.co/run-collection/listening-analytics)
+
+---
+
+## 🎯 Architecture & Learning Strategy
+
+This project is structured around **evolutionary architecture** and progressive cognitive learning:
+
+```txt
+V1: REST API (Express, Prisma, SQLite)
+  ↓
+V2: GraphQL API (Apollo Server, Express Integration)
+  ↓
 V3: Serverless / Cloud Functions
-The domain model, business rules, and analytical queries remain constant, while the delivery mechanism changes.
+```
 
-🛠️ Tech Stack (V1)
-Runtime: Node.js
-Language: TypeScript (Strict Mode)
-Web Framework: Express
-Database ORM: Prisma
-Database: SQLite (local file-based SQL for prototyping)
-Database Design
+The domain model, business rules, and analytical queries remain constant while the delivery mechanism changes.
+
+### 🧠 Software Design vs. System Design Strategy
+
+* **Phases V1 to V3 (Software Architecture & Software Design):** Primary focus on code design within application boundaries — layered architecture (`Controller`, `Service`, `Repository`), clean domain abstractions, Prisma/SQL queries, and comparing developer experience (DX) between REST and GraphQL.
+* **Phase V3+ (System Design & Distributed Systems):** Gradual transition to infra/system design topics — rate-limiting external API ingestion, background processing queues for Last.fm sync, caching layers with Redis, and cloud deployment topology.
+
+---
+
+## 💻 Repository Structure & Frontend Strategy
+
+The repository follows a **Monorepo (Separate Directories)** structure:
+
+```txt
+Listening-Analytics/
+├── docs/
+│   └── postman/           # Official Postman Collections
+│       └── listening-analytics.postman_collection.json
+├── src/                   # Backend API (Express & GraphQL)
+│   ├── controllers/
+│   ├── graphql/
+│   ├── services/
+│   └── server.ts
+└── (Future) frontend/     # Minimalist Web Dashboard (React/Next.js)
+```
+
+> **Note on Frontend:** A minimalist analytics dashboard (React / Chart.js) will be added in a separate `/frontend` directory to showcase the API visually for portfolio presentations, testing Client-Server integration and CORS without coupling Express to static assets.
+
+---
+
+## 🚀 Postman Collection
+
+To test and explore all endpoints (REST V1 and GraphQL V2):
+
+1. **Local File:** Import the file [`docs/postman/listening-analytics.postman_collection.json`](file:///c:/Users/ASUS/Documents/Estudos/Listening-Analytics/docs/postman/listening-analytics.postman_collection.json) directly into Postman, Insomnia, or Bruno.
+2. **Public Workspace:** Click the **Run in Postman** badge at the top of this README to launch the collection in the Postman Cloud Web Client.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Runtime:** Node.js
+* **Language:** TypeScript (Strict Mode)
+* **Web Framework:** Express
+* **GraphQL:** Apollo Server (`@apollo/server`) & `@as-integrations/express4`
+* **Database ORM:** Prisma
+* **Database:** SQLite (local SQL for rapid prototyping, migrating to PostgreSQL in cloud phase)
+
+---
+
+## 🗄️ Database Schema & Entities
+
 The data ingestion pipeline parses raw JSON from the Last.fm API and normalizes it into a relational schema:
 
-User: Stores user metadata.
-Artist: Unique registry of artists.
-Track: Unique registry of tracks, linked to an Artist (handles same-name tracks by different artists via compound keys).
-Scrobble: Represents a single playback event connecting a User and a Track at a specific timestamp.
-Getting Started
-Prerequisites
-Node.js (LTS version)
-NPM npm install
+* **User:** Stores user metadata.
+* **Artist:** Unique registry of artists.
+* **Track:** Unique registry of tracks linked to an Artist (handles same-name tracks via compound keys).
+* **Scrobble:** Represents a single playback event connecting a User and a Track at a specific timestamp.
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+* Node.js (LTS version)
+* npm
+
+### Installation & Execution
+
+```bash
+# Install dependencies
+npm install
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server (REST + GraphQL)
+npm run dev
+```
+
+* **REST API Server:** `http://localhost:3000`
+* **GraphQL Endpoint:** `http://localhost:3000/graphql`

@@ -1,28 +1,32 @@
 {
     "name": "lastfm-analytics-api",
     "version": "1.0.0",
-    "description": "Last.fm Analytics API", 
-    "main": "dist/server.js", 
+    "description": "Last.fm Analytics API",
+    "main": "dist/server.js",
     "scripts": {
         "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
         "build": "tsc",
         "start": "node dist/server.js"
     },
-  "keywords": [],     
-   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "^5.14.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.12.12",
-    "prisma": "^5.14.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
-  }
-
-
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@apollo/server": "^5.5.1",
+        "@as-integrations/express4": "^1.1.2",
+        "@prisma/client": "^5.14.0",
+        "cors": "^2.8.6",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "graphql": "^16.14.2",
+        "graphql-tag": "^2.12.7"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^4.17.21",
+        "@types/node": "^20.12.12",
+        "prisma": "^5.14.0",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.4.5"
+    }
 }
